@@ -19,7 +19,6 @@ def ObtenerFolderConfig():
 
     Folder = UnirPath('.config', Programa)
     Folder = UnirPath(Path.home(), Folder)
-    logger.info("Hola desde archivo")
 
     return Folder
 
@@ -84,12 +83,14 @@ def SalvarValor(Archivo, Atributo, Valor, local=True):
                 data = yaml.load(f, Loader=yaml.FullLoader)
         else:
             logger.warning(f"Archivo no Exite {Archivo}")
+            return None
     elif Archivo.endswith(".md"):
         with open(Archivo) as f:
             try:
                 data = list(yaml.load_all(f, Loader=yaml.SafeLoader))[0]
             except yaml.YAMLError as exc:
                 logger.warning(f"error con yaml {exc}")
+                return None
 
     Tipo = type(Atributo)
     if Tipo is list:
@@ -146,3 +147,4 @@ def ObtenerListaArhivos(Directorio):
             if os.path.isfile(os.path.join(FolderActual, archivo)):
                 ListaArchivos.append(archivo)
         return ListaArchivos
+    return None
