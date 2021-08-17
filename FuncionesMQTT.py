@@ -8,10 +8,10 @@ logger = ConfigurarLogging(__name__)
 
 def EnviarMensajeMQTT(Topic, Mensaje):
     """Envia un Mensaje Simple por MQTT."""
-    Usuario = ObtenerValor("/Data/MQTT.json", "Usuario")
-    Contrasenna = ObtenerValor("/Data/MQTT.json", "Contrasenna")
-    Servidor = ObtenerValor("/Data/MQTT.json", "Servidor")
-    Puesto = ObtenerValor("/Data/MQTT.json", "Puerto")
+    Usuario = ObtenerValor("data/MQTT.json", "Usuario")
+    Contrasenna = ObtenerValor("data/MQTT.json", "Contrasenna")
+    Servidor = ObtenerValor("data/MQTT.json", "Servidor")
+    Puesto = ObtenerValor("data/MQTT.json", "Puerto")
     MiMQTTSimple = mqtt.Client()
     MiMQTTSimple.username_pw_set(Usuario, Contrasenna)
     MiMQTTSimple.connect(Servidor, Puesto)
