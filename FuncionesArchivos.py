@@ -77,20 +77,10 @@ def SalvarValor(Archivo, Atributo, Valor, local=True):
     ArchivoConfig = ObtenerFolderConfig()
     if local:
         Archivo = UnirPath(ArchivoConfig, Archivo)
-    if Archivo.endswith(".json"):
-        if os.path.exists(Archivo):
-            with open(Archivo) as f:
-                data = yaml.load(f, Loader=yaml.FullLoader)
-        else:
-            logger.warning(f"Archivo no Exite {Archivo}")
-            return None
-    elif Archivo.endswith(".md"):
-        with open(Archivo) as f:
-            try:
-                data = list(yaml.load_all(f, Loader=yaml.SafeLoader))[0]
-            except yaml.YAMLError as exc:
-                logger.warning(f"error con yaml {exc}")
-                return None
+
+    data = ObtenerArchivo(ArchivoConfig)
+    if data is None:
+        return None
 
     Tipo = type(Atributo)
     if Tipo is list:
