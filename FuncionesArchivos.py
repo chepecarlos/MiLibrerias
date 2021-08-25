@@ -4,8 +4,9 @@ import json
 import os
 import yaml
 import sys
+import shutil
 
-from pathlib import Path
+from pathlib import Path, PosixPath
 
 from .FuncionesLogging import ConfigurarLogging
 
@@ -20,11 +21,25 @@ def ObtenerFolderConfig():
     Folder = UnirPath('.config', Programa)
     Folder = UnirPath(Path.home(), Folder)
 
+    Path(Folder).mkdir(parents=True, exist_ok=True)
+
     return Folder
+
+
+def BorrarFolderConfig():
+    Contiguraciones = ObtenerFolderConfig()
+    try:
+        shutil.rmtree(Contiguraciones)
+    except OSError as e:
+        print("Error: %s - %s." % (e.filename, e.strerror))
+    pass
 
 
 def ObtenerArchivo(Archivo):
     """Leer y devuelte la informacion de un archivo dentro del folde de configuraciones."""
+    if type(Archivo) not in [str, PosixPath]:
+        raise TypeError("El Archivo tiene que ser str o PosixPath")
+
     ArchivoConfig = ObtenerFolderConfig()
     if Archivo.endswith(".json"):
         ArchivoActual = UnirPath(ArchivoConfig, Archivo)
@@ -42,10 +57,12 @@ def ObtenerArchivo(Archivo):
 
 def ObtenerValor(Archivo, Atributo, Depurar=True):
     """Obtiene un Atributo de un Archivo."""
+    if type(Archivo) not in [str, PosixPath]:
+        raise TypeError("El Archivo tiene que ser str o PosixPath")
+
     data = ObtenerArchivo(Archivo)
 
     if data is None:
-        logger.warning(f"Archivo no Exite {Archivo}")
         return None
 
     Tipo = type(Atributo)
@@ -58,29 +75,39 @@ def ObtenerValor(Archivo, Atributo, Depurar=True):
         if Atributo in data:
             return data[Atributo]
 
-    if Depurar:
-        logger.warning(f"No existe el atributo {Atributo}")
     return None
+
+
+def EscribirArchivo(Archivo, Data):
+    NombreArchivo = Path(Archivo).name
+    RutaArchivo = Path(Archivo).parent
+    RutaArchivo.mkdir(parents=True, exist_ok=True)
+    with open(Archivo, 'w+') as f:
+        json.dump(Data, f, indent=2)
 
 
 def SalvarArchivo(Archivo, Data):
     """Sobre escribe data en archivo."""
+    if type(Archivo) not in [str, PosixPath]:
+        raise TypeError("Los Path tiene que ser str o PosixPath")
+
     ArchivoConfig = ObtenerFolderConfig()
     Archivo = UnirPath(ArchivoConfig, Archivo)
-    with open(Archivo, 'w+') as f:
-        json.dump(Data, f, indent=1)
+    EscribirArchivo(Archivo, Data)
 
 
 def SalvarValor(Archivo, Atributo, Valor, local=True):
     """Salvar un Valor en Archivo."""
-    data = dict()
+    if type(Archivo) not in [str, PosixPath]:
+        raise TypeError("Los Path tiene que ser str o PosixPath")
+
     ArchivoConfig = ObtenerFolderConfig()
     if local:
         Archivo = UnirPath(ArchivoConfig, Archivo)
 
     data = ObtenerArchivo(ArchivoConfig)
     if data is None:
-        return None
+        data = dict()
 
     Tipo = type(Atributo)
     if Tipo is list:
@@ -93,17 +120,22 @@ def SalvarValor(Archivo, Atributo, Valor, local=True):
     else:
         data[Atributo] = Valor
 
-    with open(Archivo, 'w') as f:
-        json.dump(data, f, indent=2)
+    EscribirArchivo(Archivo, data)
 
 
 def UnirPath(Path1, Path2):
     """Une dos direciones."""
+    if type(Path1) not in [str, PosixPath] or type(Path2) not in [str, PosixPath]:
+        raise TypeError("Los Path tiene que ser str o PosixPath")
+
     return os.path.join(Path1, Path2)
 
 
 def RelativoAbsoluto(Path, FolderActual):
     """Convierte Direcion relativas en absolutas."""
+    if type(Path) not in [str, PosixPath] or type(FolderActual) not in [str, PosixPath]:
+        raise TypeError("Los Path tiene que ser str o PosixPath")
+    
     if Path.startswith("./"):
         return UnirPath(FolderActual, QuitarPrefixInicio(Path, "./"))
     return Path
@@ -130,6 +162,9 @@ def ObtenerListaFolder(Directorio):
 
 def ObtenerListaArhivos(Directorio):
     """Obtiene una lista de Archivo en un directorio."""
+    if type(Directorio) not in [str, PosixPath]:
+        raise TypeError("Los Path tiene que ser str o PosixPath")
+
     ArchivoConfig = ObtenerFolderConfig()
     FolderActual = os.path.join(ArchivoConfig, Directorio)
     ListaArchivos = []
