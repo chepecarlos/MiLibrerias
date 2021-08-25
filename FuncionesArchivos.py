@@ -84,11 +84,12 @@ def SalvarValor(Archivo, Atributo, Valor, local=True):
 
     Tipo = type(Atributo)
     if Tipo is list:
-        # TODO Buscar como insertar para mas de nos niveles
-        if len(Atributo) >= 2:
-            if not Atributo[0] in data:
-                data[Atributo[0]] = dict()
-            data[Atributo[0]][Atributo[1]] = Valor
+        InData = data
+        for AtributoActual in Atributo[:-1]:
+            if not AtributoActual in InData:
+                InData[AtributoActual] = dict()
+            InData = InData[AtributoActual]
+        InData[Atributo[-1]] = Valor
     else:
         data[Atributo] = Valor
 
