@@ -12,6 +12,11 @@ from .FuncionesLogging import ConfigurarLogging
 
 logger = ConfigurarLogging(__name__)
 
+# TODO: https://www.youtube.com/watch?v=daefaLgNkw0
+# TODO: usar get para obtener valor y recivir none si no esta
+# TODO: update Actaulizar la info
+# TODO: Borrar con def data['valor']
+# TODO: pop para carcar un dato 
 
 def ObtenerFolderConfig():
     """Devuelte ruta donde esta el folder de configuracion."""
@@ -81,9 +86,15 @@ def ObtenerValor(Archivo, Atributo, Depurar=True):
 def EscribirArchivo(Archivo, Data):
     NombreArchivo = Path(Archivo).name
     RutaArchivo = Path(Archivo).parent
+    SufijoArchivo = Path(Archivo).suffix
     RutaArchivo.mkdir(parents=True, exist_ok=True)
     with open(Archivo, 'w+') as f:
-        json.dump(Data, f, indent=2)
+        if SufijoArchivo == ".json":
+            json.dump(Data, f, indent=2)
+        elif SufijoArchivo == ".txt":
+            f.write(Data)
+        elif SufijoArchivo == ".md":
+            yaml.dump(Data, f, explicit_start=True, explicit_end=True)
 
 
 def SalvarArchivo(Archivo, Data):
