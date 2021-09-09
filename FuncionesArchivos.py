@@ -16,7 +16,8 @@ logger = ConfigurarLogging(__name__)
 # TODO: usar get para obtener valor y recivir none si no esta
 # TODO: update Actaulizar la info
 # TODO: Borrar con def data['valor']
-# TODO: pop para carcar un dato 
+# TODO: pop para carcar un dato
+
 
 def ObtenerFolderConfig():
     """Devuelte ruta donde esta el folder de configuracion."""
@@ -48,6 +49,7 @@ def ObtenerArchivo(Archivo):
     ArchivoConfig = ObtenerFolderConfig()
     if Archivo.endswith(".json"):
         ArchivoActual = UnirPath(ArchivoConfig, Archivo)
+        # TODO: Agregar codigo de fallo
         if os.path.exists(ArchivoActual):
             with open(ArchivoActual) as f:
                 return json.load(f)
@@ -116,7 +118,7 @@ def SalvarValor(Archivo, Atributo, Valor, local=True):
     if local:
         Archivo = UnirPath(ArchivoConfig, Archivo)
 
-    data = ObtenerArchivo(ArchivoConfig)
+    data = ObtenerArchivo(Archivo)
     if data is None:
         data = dict()
 
@@ -146,7 +148,7 @@ def RelativoAbsoluto(Path, FolderActual):
     """Convierte Direcion relativas en absolutas."""
     if type(Path) not in [str, PosixPath] or type(FolderActual) not in [str, PosixPath]:
         raise TypeError("Los Path tiene que ser str o PosixPath")
-    
+
     if Path.startswith("./"):
         return UnirPath(FolderActual, QuitarPrefixInicio(Path, "./"))
     return Path
