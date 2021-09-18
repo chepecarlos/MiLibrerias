@@ -38,7 +38,6 @@ def BorrarFolderConfig():
         shutil.rmtree(Contiguraciones)
     except OSError as e:
         print("Error: %s - %s." % (e.filename, e.strerror))
-    pass
 
 
 def ObtenerArchivo(Archivo):
@@ -47,18 +46,16 @@ def ObtenerArchivo(Archivo):
         raise TypeError("El Archivo tiene que ser str o PosixPath")
 
     ArchivoConfig = ObtenerFolderConfig()
-    if Archivo.endswith(".json"):
-        ArchivoActual = UnirPath(ArchivoConfig, Archivo)
-        # TODO: Agregar codigo de fallo
-        if os.path.exists(ArchivoActual):
+    ArchivoActual = UnirPath(ArchivoConfig, Archivo)
+    if os.path.exists(ArchivoActual):
+        try:
             with open(ArchivoActual) as f:
-                return json.load(f)
-    elif Archivo.endswith(".md"):
-        with open(Archivo) as f:
-            try:
-                return list(yaml.load_all(f, Loader=yaml.SafeLoader))[0]
-            except yaml.YAMLError as exc:
-                logger.warning(f"error con yaml {exc}")
+                if Archivo.endswith(".json"):
+                    return json.load(f)
+                elif Archivo.endswith(".md"):
+                    return list(yaml.load_all(f, Loader=yaml.SafeLoader))[0]
+        except Exception as e:
+            logger.warning(f"Archivo[Error] {Archivo} {e}")
     return None
 
 
