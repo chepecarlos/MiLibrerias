@@ -40,13 +40,16 @@ def BorrarFolderConfig():
         print("Error: %s - %s." % (e.filename, e.strerror))
 
 
-def ObtenerArchivo(Archivo):
+def ObtenerArchivo(Archivo, EnConfig=True):
     """Leer y devuelte la informacion de un archivo dentro del folde de configuraciones."""
     if type(Archivo) not in [str, PosixPath]:
         raise TypeError("El Archivo tiene que ser str o PosixPath")
 
-    ArchivoConfig = ObtenerFolderConfig()
-    ArchivoActual = UnirPath(ArchivoConfig, Archivo)
+    if EnConfig:
+        ArchivoConfig = ObtenerFolderConfig()
+        ArchivoActual = UnirPath(ArchivoConfig, Archivo)
+    else: 
+        ArchivoActual = Archivo
     if os.path.exists(ArchivoActual):
         try:
             with open(ArchivoActual) as f:
