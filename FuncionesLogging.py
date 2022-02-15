@@ -2,8 +2,8 @@
 import logging
 import os
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 
 def FoldeLog():
@@ -11,15 +11,15 @@ def FoldeLog():
     Programa = os.path.basename(sys.argv[0]).lower()
     Programa = os.path.splitext(Programa)[0]
 
-    Folder = os.path.join('.config', Programa)
+    Folder = os.path.join(".config", Programa)
     Folder = os.path.join(Path.home(), Folder)
-    Folder = os.path.join(Folder, 'logs')
+    Folder = os.path.join(Folder, "logs")
 
     return Folder
 
 
 def ConfigurarLogging(Nombre, NivelLog=logging.DEBUG):
-    """Configura el archivo de depuracion."""
+    """Configura el archivo de depuración."""
     logger = logging.getLogger(Nombre)
     logger.setLevel(NivelLog)
 
@@ -29,12 +29,12 @@ def ConfigurarLogging(Nombre, NivelLog=logging.DEBUG):
         os.makedirs(ArchivoLog)
 
     # Agrega Fecha actua a log
-    ArchivoLog = ArchivoLog + '/{:%Y-%m-%d_%H:%M:%S}.log'.format(datetime.now())
+    ArchivoLog = ArchivoLog + "/{:%Y-%m-%d_%H:%M:%S}.log".format(datetime.now())
 
     c_handler = logging.StreamHandler()
     f_handler = logging.FileHandler(ArchivoLog)
-    c_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
-    f_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    c_format = logging.Formatter("%(name)s-%(message)s")
+    f_format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
     c_handler.setFormatter(c_format)
     f_handler.setFormatter(f_format)

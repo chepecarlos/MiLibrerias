@@ -1,2 +1,2 @@
 # MiLibrerias
-Librerias que uso en multiples proyectos
+Librerías que uso en multiples proyectos

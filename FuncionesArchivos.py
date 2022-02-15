@@ -2,11 +2,11 @@
 
 import json
 import os
-import yaml
-import sys
 import shutil
-
+import sys
 from pathlib import Path, PosixPath
+
+import yaml
 
 from .FuncionesLogging import ConfigurarLogging
 
@@ -24,7 +24,7 @@ def ObtenerFolderConfig():
     Programa = os.path.basename(sys.argv[0]).lower()
     Programa = os.path.splitext(Programa)[0]
 
-    Folder = UnirPath('.config', Programa)
+    Folder = UnirPath(".config", Programa)
     Folder = UnirPath(Path.home(), Folder)
 
     Path(Folder).mkdir(parents=True, exist_ok=True)
@@ -48,7 +48,7 @@ def ObtenerArchivo(Archivo, EnConfig=True):
     if EnConfig:
         ArchivoConfig = ObtenerFolderConfig()
         ArchivoActual = UnirPath(ArchivoConfig, Archivo)
-    else: 
+    else:
         ArchivoActual = Archivo
     if os.path.exists(ArchivoActual):
         try:
@@ -85,12 +85,12 @@ def ObtenerValor(Archivo, Atributo, Depurar=True):
     return None
 
 
-def EscribirArchivo(Archivo, Data):
+def EscribirArchivo(Archivo: str, Data):
     NombreArchivo = Path(Archivo).name
     RutaArchivo = Path(Archivo).parent
     SufijoArchivo = Path(Archivo).suffix
     RutaArchivo.mkdir(parents=True, exist_ok=True)
-    with open(Archivo, 'w+') as f:
+    with open(Archivo, "w+") as f:
         if SufijoArchivo == ".json":
             json.dump(Data, f, indent=2)
         elif SufijoArchivo == ".txt":
@@ -99,7 +99,7 @@ def EscribirArchivo(Archivo, Data):
             yaml.dump(Data, f, explicit_start=True, explicit_end=True)
 
 
-def SalvarArchivo(Archivo, Data):
+def SalvarArchivo(Archivo: str, Data):
     """Sobre escribe data en archivo."""
     if type(Archivo) not in [str, PosixPath]:
         raise TypeError("Los Path tiene que ser str o PosixPath")
@@ -154,9 +154,9 @@ def RelativoAbsoluto(Path, FolderActual):
     return Path
 
 
-def QuitarPrefixInicio(text, prefix):
+def QuitarPrefixInicio(text: str, prefix: str):
     """Quita un Prefijo o patron del inicio de una cadena."""
-    return text[text.startswith(prefix) and len(prefix):]
+    return text[text.startswith(prefix) and len(prefix) :]
 
 
 def ObtenerListaFolder(Directorio):
