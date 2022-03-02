@@ -118,7 +118,7 @@ def SalvarValor(Archivo, Atributo, Valor, local=True):
     if local:
         Archivo = UnirPath(ArchivoConfig, Archivo)
 
-    data = ObtenerArchivo(Archivo)
+    data = ObtenerArchivo(Archivo, local)
     if data is None:
         data = dict()
 
