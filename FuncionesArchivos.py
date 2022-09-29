@@ -13,14 +13,14 @@ from .FuncionesLogging import ConfigurarLogging
 logger = ConfigurarLogging(__name__)
 
 # TODO: https://www.youtube.com/watch?v=daefaLgNkw0
-# TODO: usar get para obtener valor y recivir none si no esta
-# TODO: update Actaulizar la info
+# TODO: usar get para obtener valor y recibir none si no esta
+# TODO: update Actualizar la info
 # TODO: Borrar con def data['valor']
 # TODO: pop para carcar un dato
 
 
 def ObtenerFolderConfig():
-    """Devuelte ruta donde esta el folder de configuracion."""
+    """Devuelve ruta donde esta el folder de configuración."""
     Programa = os.path.basename(sys.argv[0]).lower()
     Programa = os.path.splitext(Programa)[0]
 
@@ -33,15 +33,15 @@ def ObtenerFolderConfig():
 
 
 def BorrarFolderConfig():
-    Contiguraciones = ObtenerFolderConfig()
+    Configuraciones = ObtenerFolderConfig()
     try:
-        shutil.rmtree(Contiguraciones)
+        shutil.rmtree(Configuraciones)
     except OSError as e:
         print("Error: %s - %s." % (e.filename, e.strerror))
 
 
 def ObtenerArchivo(Archivo, EnConfig=True):
-    """Leer y devuelte la informacion de un archivo dentro del folde de configuraciones."""
+    """Leer y devuelta la información de un archivo dentro del folded de configuraciones."""
     if type(Archivo) not in [str, PosixPath]:
         raise TypeError("El Archivo tiene que ser str o PosixPath")
 
@@ -137,7 +137,7 @@ def SalvarValor(Archivo, Atributo, Valor, local=True):
 
 
 def UnirPath(Path1, Path2):
-    """Une dos direciones."""
+    """Une dos direcciones."""
     if type(Path1) not in [str, PosixPath] or type(Path2) not in [str, PosixPath]:
         raise TypeError("Los Path tiene que ser str o PosixPath")
 
@@ -145,7 +145,7 @@ def UnirPath(Path1, Path2):
 
 
 def RelativoAbsoluto(Path, FolderActual):
-    """Convierte Direcion relativas en absolutas."""
+    """Convierte dirección relativas en absolutas."""
     if type(Path) not in [str, PosixPath] or type(FolderActual) not in [str, PosixPath]:
         raise TypeError("Los Path tiene que ser str o PosixPath")
 
