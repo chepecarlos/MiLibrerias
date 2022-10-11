@@ -7,7 +7,7 @@ from .FuncionesLogging import ConfigurarLogging
 logger = ConfigurarLogging(__name__)
 
 
-def EnviarMensajeMQTT(Topic, Mensaje, Usuario=None, Contrasenna=None, Servidor=None, Puerto=None, Depuracion=True):
+def EnviarMensajeMQTT(Topic, Mensaje, Usuario=None, Contrasenna=None, Servidor=None, Puerto=None):
     """Envia un Mensaje Simple por MQTT."""
     # TODO: Verificar que Existe Archivo MQTT.json
     ArchivoData = "data/mqtt.json"
@@ -19,10 +19,12 @@ def EnviarMensajeMQTT(Topic, Mensaje, Usuario=None, Contrasenna=None, Servidor=N
         Servidor = ObtenerValor(ArchivoData, "servidor")
     if Puerto is None:
         Puerto = ObtenerValor(ArchivoData, "puerto")
-    MiMQTTSimple = mqtt.Client()
-    MiMQTTSimple.username_pw_set(Usuario, Contrasenna)
-    MiMQTTSimple.connect(Servidor, Puerto)
-    MiMQTTSimple.publish(Topic, Mensaje)
-    MiMQTTSimple.disconnect()
-    if Depuracion:
+    try:
+        MiMQTTSimple = mqtt.Client()
+        MiMQTTSimple.username_pw_set(Usuario, Contrasenna)
+        MiMQTTSimple.connect(Servidor, Puerto)
+        MiMQTTSimple.publish(Topic, Mensaje)
+        MiMQTTSimple.disconnect()
         logger.info(f"MQTT[{Topic}] {Mensaje}")
+    except Exception as error:
+        logger.error(f"MQTT[Error] No se puedo enviar [{Topic}]{Mensaje}")
