@@ -57,6 +57,8 @@ def ObtenerArchivo(Archivo, EnConfig=True):
                     return json.load(f)
                 elif Archivo.endswith(".md"):
                     return list(yaml.load_all(f, Loader=yaml.SafeLoader))[0]
+                elif Archivo.endswith(".txt"):
+                    return f.read()
         except Exception as e:
             logger.warning(f"Archivo[Error] {Archivo} {e}")
     return None
