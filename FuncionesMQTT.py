@@ -21,10 +21,11 @@ def EnviarMensajeMQTT(Topic, Mensaje, Usuario=None, Contrasenna=None, Servidor=N
         Puerto = ObtenerValor(ArchivoData, "puerto")
     try:
         MiMQTTSimple = mqtt.Client()
-        MiMQTTSimple.username_pw_set(Usuario, Contrasenna)
+        if Usuario is not None and Contrasenna is not None:
+            MiMQTTSimple.username_pw_set(Usuario, Contrasenna)
         MiMQTTSimple.connect(Servidor, Puerto)
         MiMQTTSimple.publish(Topic, Mensaje)
         MiMQTTSimple.disconnect()
         logger.info(f"MQTT[{Topic}] {Mensaje}")
     except Exception as error:
-        logger.error(f"MQTT[Error] No se puedo enviar [{Topic}]{Mensaje}")
+        logger.error(f"MQTT[Error] No se puedo enviar [{Topic}]{Mensaje} - {error}")
