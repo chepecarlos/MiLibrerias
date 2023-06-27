@@ -1,6 +1,7 @@
 # https://python-telegram-bot.org/
 
 """Librerías para mandar mensajes de telegram"""
+import asyncio
 
 import telegram
 
@@ -22,4 +23,4 @@ def EnviarMensajeTelegram(mensaje, tokenBot=None, idChat=None):
         return
 
     bot = telegram.Bot(token=tokenBot)
-    bot.send_message(chat_id=idChat, text=mensaje, parse_mode="HTML")
+    asyncio.run(bot.send_message(chat_id=idChat, text=mensaje, parse_mode="HTML"))
