@@ -22,4 +22,4 @@ def EnviarMensajeTelegram(mensaje, tokenBot=None, idChat=None):
         return
 
     bot = telegram.Bot(token=tokenBot)
-    asyncio.run(bot.send_message(chat_id=idChat, text=mensaje))
+    asyncio.run(bot.send_message(chat_id=idChat, text=mensaje, parse_mode="Markdown"))
