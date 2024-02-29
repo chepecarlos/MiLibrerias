@@ -17,7 +17,7 @@ def EnviarMensajeTelegram(mensaje, tokenBot=None, idChat=None):
     if idChat is None:
         idChat = ObtenerValor("data/TelegramBot.json", "ID_Chat")
 
-    if tokenBot is None or idChat is None:
+    if tokenBot is None or idChat is None or tokenBot == "" or idChat == "":
         logger.error("No hay token de telegram")
         return
 
