@@ -32,6 +32,23 @@ def ObtenerFolderConfig():
     return Folder
 
 
+def leerData(archivo):
+    """
+    Lee los archivos primero .md y después .json y lo devuelve
+    """
+    tipoArchivos = [".md", ".json"]
+
+    if ".md" in archivo or ".json" in archivo:
+        return ObtenerArchivo(archivo)
+
+    for tipo in tipoArchivos:
+        dataTmp = ObtenerArchivo(f"{archivo}{tipo}")
+        if dataTmp is not None:
+            logger.info(f"Abriendo {archivo}{tipo}")
+            return dataTmp
+    return None
+
+
 def BorrarFolderConfig():
     Configuraciones = ObtenerFolderConfig()
     try:
