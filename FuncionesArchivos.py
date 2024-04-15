@@ -32,7 +32,7 @@ def ObtenerFolderConfig():
     return Folder
 
 
-def leerData(archivo):
+def leerData(archivo, depruacion=False):
     """
     Lee los archivos primero .md y después .json y lo devuelve
     """
@@ -44,7 +44,8 @@ def leerData(archivo):
     for tipo in tipoArchivos:
         dataTmp = ObtenerArchivo(f"{archivo}{tipo}")
         if dataTmp is not None:
-            logger.info(f"Abriendo {archivo}{tipo}")
+            if depruacion:
+                logger.info(f"Abriendo {archivo}{tipo}")
             return dataTmp
     return None
 
@@ -57,7 +58,7 @@ def BorrarFolderConfig():
         print("Error: %s - %s." % (e.filename, e.strerror))
 
 
-def ObtenerArchivo(Archivo, EnConfig=True):
+def ObtenerArchivo(Archivo, EnConfig=True, depuracion=False):
     """Leer y devuelta la información de un archivo dentro del folded de configuraciones."""
     if type(Archivo) not in [str, PosixPath]:
         raise TypeError("El Archivo tiene que ser str o PosixPath")
@@ -67,6 +68,7 @@ def ObtenerArchivo(Archivo, EnConfig=True):
         ArchivoActual = UnirPath(ArchivoConfig, Archivo)
     else:
         ArchivoActual = Archivo
+    
     if os.path.exists(ArchivoActual):
         try:
             with open(ArchivoActual) as f:
@@ -77,16 +79,24 @@ def ObtenerArchivo(Archivo, EnConfig=True):
                 elif Archivo.endswith(".txt"):
                     return f.read()
         except Exception as e:
-            logger.warning(f"Archivo[Error] {Archivo} {e}")
+            if depuracion:
+                logger.warning(f"Archivo[Error] {Archivo} {e}")
+    else:
+        if depuracion:
+            logger.warning(f"Archivo[Error] No existe {ArchivoActual}")
+ 
     return None
 
 
-def ObtenerValor(Archivo, Atributo, Depurar=True):
+def ObtenerValor(Archivo, Atributo, depuracion=False):
     """Obtiene un Atributo de un Archivo."""
     if type(Archivo) not in [str, PosixPath]:
         raise TypeError("El Archivo tiene que ser str o PosixPath")
 
-    data = ObtenerArchivo(Archivo)
+    if Path(Archivo).suffix == "":
+        Archivo = f"{Archivo}.md"
+
+    data = ObtenerArchivo(Archivo, depuracion=depuracion)
 
     if data is None:
         return None
@@ -109,6 +119,12 @@ def EscribirArchivo(Archivo: str, Data):
     RutaArchivo = Path(Archivo).parent
     SufijoArchivo = Path(Archivo).suffix
     RutaArchivo.mkdir(parents=True, exist_ok=True)
+
+    if SufijoArchivo == "":
+        print(type(Archivo), Archivo, Data)
+        SufijoArchivo = ".md"
+        Archivo = f"{Archivo}.md"
+
     with open(Archivo, "w+") as f:
         if SufijoArchivo == ".json":
             json.dump(Data, f, indent=2)
@@ -116,6 +132,8 @@ def EscribirArchivo(Archivo: str, Data):
             f.write(Data)
         elif SufijoArchivo == ".md":
             yaml.dump(Data, f, explicit_start=True, explicit_end=True)
+        else:
+            print(f"Error: {Archivo} Atributo {SufijoArchivo}")
 
 
 def SalvarArchivo(Archivo: str, Data):
@@ -128,7 +146,7 @@ def SalvarArchivo(Archivo: str, Data):
     EscribirArchivo(Archivo, Data)
 
 
-def SalvarValor(Archivo, Atributo, Valor, local=True):
+def SalvarValor(Archivo, Atributo, Valor, local=True, depuracion=False):
     """Salvar un Valor en Archivo."""
     if type(Archivo) not in [str, PosixPath]:
         raise TypeError("Los Path tiene que ser str o PosixPath")
@@ -137,7 +155,10 @@ def SalvarValor(Archivo, Atributo, Valor, local=True):
     if local:
         Archivo = UnirPath(ArchivoConfig, Archivo)
 
-    data = ObtenerArchivo(Archivo, local)
+    if Path(Archivo).suffix == "":
+        Archivo = f"{Archivo}.md"
+    
+    data = ObtenerArchivo(Archivo, local, depuracion=depuracion)
     if data is None:
         data = dict()
 
