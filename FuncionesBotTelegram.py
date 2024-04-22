@@ -11,7 +11,7 @@ logger = ConfigurarLogging(__name__)
 
 
 def EnviarMensajeTelegram(mensaje, tokenBot=None, idChat=None):
-    """Enviá un mensaje por telegram."""
+    """Envía un mensaje por telegram."""
     if tokenBot is None:
         tokenBot = ObtenerValor("data/TelegramBot.json", "Token_Telegram")
     if idChat is None:
@@ -21,5 +21,9 @@ def EnviarMensajeTelegram(mensaje, tokenBot=None, idChat=None):
         logger.error("No hay token de telegram")
         return
 
-    bot = telegram.Bot(token=tokenBot)
-    asyncio.run(bot.send_message(chat_id=idChat, text=mensaje, parse_mode="Markdown"))
+    try:
+        bot = telegram.Bot(token=tokenBot)
+        mensaje = mensaje.replace("_", "\\_")
+        asyncio.run(bot.send_message(chat_id=idChat, text=mensaje, parse_mode="Markdown"))
+    except Exception as err:
+        print(f"TelegramBot[Error] {err}")
