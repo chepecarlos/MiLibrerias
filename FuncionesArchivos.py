@@ -195,10 +195,16 @@ def ObtenerListaFolder(Directorio: str) -> list:
 
 
 def ObtenerListaArhivos(Directorio: str | PosixPath) -> list:
-    """Obtiene una lista de Archivo en un directorio."""
-    if type(Directorio) not in [str, PosixPath]:
-        raise TypeError("Los Path tiene que ser str o PosixPath")
+    """Obtiene una lista de Archivo en un directorio
+    
+    Args:
+        Directorio (str | PosixPath): folder a buscar Archivos
 
+
+    Returns:
+        list: lista de folder encontrados
+    """
+    
     ArchivoConfig = ObtenerFolderConfig()
     FolderActual = os.path.join(ArchivoConfig, Directorio)
     ListaArchivos = list()
