@@ -4,9 +4,10 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
+from logging import Logger
 
 
-def FoldeLog():
+def FoldeLog() -> str:
     """Devuelte ruta donde esta el folder de configuracion."""
     Programa = os.path.basename(sys.argv[0]).lower()
     Programa = os.path.splitext(Programa)[0]
@@ -18,8 +19,9 @@ def FoldeLog():
     return Folder
 
 
-def ConfigurarLogging(Nombre, NivelLog=logging.DEBUG):
+def ConfigurarLogging(Nombre, NivelLog=logging.INFO) -> Logger:
     """Configura el archivo de depuración."""
+    #TODO: Nivel de depuracion
     logger = logging.getLogger(Nombre)
     logger.setLevel(NivelLog)
 

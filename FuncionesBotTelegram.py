@@ -11,7 +11,7 @@ logger = ConfigurarLogging(__name__)
 
 
 def EnviarMensajeTelegram(mensaje, tokenBot=None, idChat=None):
-    """Envía un mensaje por telegram."""
+    """Enviá un mensaje por telegram."""
     if tokenBot is None:
         tokenBot = ObtenerValor("data/TelegramBot.json", "Token_Telegram")
     if idChat is None:
