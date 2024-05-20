@@ -214,3 +214,18 @@ def ObtenerListaArhivos(Directorio: str | PosixPath) -> list:
                 ListaArchivos.append(archivo)
         return ListaArchivos
     return None
+
+def obtenerArchivoPaquete(paquete: str, ruta: str):
+    """devuelve archivos interno del paquete
+
+    Args:
+        paquete (str): Nombre del programa
+        ruta (str): Donde esta la direccion a habir
+
+    Returns:
+        _type_: Información del Archivo
+    """
+    # http://peak.telecommunity.com/DevCenter/setuptools#non-package-data-files
+    from pkg_resources import Requirement, resource_filename
+    filename = resource_filename(Requirement.parse(paquete),ruta)
+    return ObtenerArchivo(filename)
