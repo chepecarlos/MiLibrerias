@@ -57,7 +57,7 @@ def BorrarFolderConfig() -> None:
         print("Error: %s - %s." % (e.filename, e.strerror))
 
 
-def ObtenerArchivo(Archivo: str, PosixPath, EnConfig: bool = True, depuracion: bool = False):
+def ObtenerArchivo(Archivo: str | PosixPath, EnConfig: bool = True, depuracion: bool = False):
     """Leer y devuelta la información de un archivo dentro del folded de configuraciones."""
     if EnConfig:
         ArchivoConfig = ObtenerFolderConfig()
@@ -227,5 +227,5 @@ def obtenerArchivoPaquete(paquete: str, ruta: str):
     """
     # http://peak.telecommunity.com/DevCenter/setuptools#non-package-data-files
     from pkg_resources import Requirement, resource_filename
-    filename = resource_filename(Requirement.parse(paquete),ruta)
-    return ObtenerArchivo(filename)
+    archivoPaquete = resource_filename(Requirement.parse(paquete),ruta)
+    return ObtenerArchivo(archivoPaquete)
