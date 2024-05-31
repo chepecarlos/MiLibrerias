@@ -11,6 +11,7 @@ def FoldeLog() -> str:
     """Devuelte ruta donde esta el folder de configuracion."""
     Programa = os.path.basename(sys.argv[0]).lower()
     Programa = os.path.splitext(Programa)[0]
+    Programa = str(Programa).split("_")[0]
 
     Folder = os.path.join(".config", Programa)
     Folder = os.path.join(Path.home(), Folder)
