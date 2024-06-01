@@ -21,10 +21,7 @@ logger = ConfigurarLogging(__name__)
 
 def ObtenerFolderConfig() -> Path:
     """Devuelve ruta donde esta el folder de configuración."""
-    Programa = os.path.basename(sys.argv[0]).lower()
-    Programa = os.path.splitext(Programa)[0]
-    Programa = str(Programa).split("_")[0]
-
+    Programa = __name__.split(".")[0].lower()
 
     Folder = UnirPath(".config", Programa)
     Folder = UnirPath(Path.home(), Folder)
