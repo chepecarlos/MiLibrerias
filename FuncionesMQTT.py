@@ -10,7 +10,7 @@ logger = ConfigurarLogging(__name__)
 def EnviarMensajeMQTT(Topic, Mensaje, Usuario=None, Contrasenna=None, Servidor=None, Puerto=None, Depuracion=False):
     """Envia un Mensaje Simple por MQTT."""
     # TODO: Verificar que Existe Archivo MQTT.json
-    ArchivoData = "data/mqtt.json"
+    ArchivoData = "data/mqtt.md"
     if Usuario is None:
         Usuario = ObtenerValor(ArchivoData, "usuario")
     if Contrasenna is None:
