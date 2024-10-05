@@ -228,3 +228,9 @@ def obtenerArchivoPaquete(paquete: str, ruta: str):
     from pkg_resources import Requirement, resource_filename
     archivoPaquete = resource_filename(Requirement.parse(paquete),ruta)
     return ObtenerArchivo(archivoPaquete)
+
+def rutaAbsoluta(ruta: str):
+    """Obtiene ruta absoluta si es relataba
+    """    
+
+    return os.path.abspath(ruta)
