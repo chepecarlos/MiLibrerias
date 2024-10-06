@@ -130,8 +130,9 @@ def EscribirArchivo(Archivo: str, Data) -> None:
 
 def SalvarArchivo(Archivo: str | PosixPath, Data) -> None:
     """Sobre escribe data en archivo."""
-    ArchivoConfig = ObtenerFolderConfig()
-    Archivo = UnirPath(ArchivoConfig, Archivo)
+    if not Path(Archivo).is_absolute():
+        ArchivoConfig = ObtenerFolderConfig()
+        Archivo = UnirPath(ArchivoConfig, Archivo)
     EscribirArchivo(Archivo, Data)
 
 
