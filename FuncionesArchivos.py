@@ -67,11 +67,12 @@ def ObtenerArchivo(Archivo: str | PosixPath, EnConfig: bool = True, depuracion: 
     if os.path.exists(ArchivoActual):
         try:
             with open(ArchivoActual) as f:
-                if Archivo.endswith(".json"):
+                textoArchivo = str(Archivo)
+                if textoArchivo.endswith(".json"):
                     return json.load(f)
-                elif Archivo.endswith(".md"):
+                elif textoArchivo.endswith(".md"):
                     return list(yaml.load_all(f, Loader=yaml.SafeLoader))[0]
-                elif Archivo.endswith(".txt"):
+                elif textoArchivo.endswith(".txt"):
                     return f.read()
         except Exception as e:
             if depuracion:
@@ -123,7 +124,8 @@ def EscribirArchivo(Archivo: str, Data) -> None:
         elif SufijoArchivo == ".txt":
             f.write(Data)
         elif SufijoArchivo == ".md":
-            yaml.dump(Data, f, explicit_start=True, explicit_end=True, allow_unicode=True, sort_keys=False)
+            yaml.dump(Data, f, explicit_start=True, explicit_end=True,
+                      allow_unicode=True, sort_keys=False)
         else:
             print(f"Error: {Archivo} Atributo {SufijoArchivo}")
 
@@ -196,7 +198,7 @@ def ObtenerListaFolder(Directorio: str) -> list:
 
 def ObtenerListaArhivos(Directorio: str | PosixPath) -> list:
     """Obtiene una lista de Archivo en un directorio
-    
+
     Args:
         Directorio (str | PosixPath): folder a buscar Archivos
 
@@ -204,7 +206,7 @@ def ObtenerListaArhivos(Directorio: str | PosixPath) -> list:
     Returns:
         list: lista de folder encontrados
     """
-    
+
     ArchivoConfig = ObtenerFolderConfig()
     FolderActual = os.path.join(ArchivoConfig, Directorio)
     ListaArchivos = list()
@@ -215,7 +217,8 @@ def ObtenerListaArhivos(Directorio: str | PosixPath) -> list:
         return ListaArchivos
     return None
 
-def obtenerArchivoPaquete(paquete: str, ruta: str):
+
+def obtenerArchivoPaquete(paquete: str, ruta: str) -> any:
     """devuelve archivos interno del paquete
 
     Args:
@@ -225,13 +228,14 @@ def obtenerArchivoPaquete(paquete: str, ruta: str):
     Returns:
         _type_: Información del Archivo
     """
-    # http://peak.telecommunity.com/DevCenter/setuptools#non-package-data-files
-    from pkg_resources import Requirement, resource_filename
-    archivoPaquete = resource_filename(Requirement.parse(paquete),ruta)
+
+    from importlib_resources import files
+
+    archivoPaquete = files(paquete).joinpath(ruta)
     return ObtenerArchivo(archivoPaquete)
 
+
 def rutaAbsoluta(ruta: str):
-    """Obtiene ruta absoluta si es relataba
-    """    
+    """Obtiene ruta absoluta si es relataba"""
 
     return os.path.abspath(ruta)
