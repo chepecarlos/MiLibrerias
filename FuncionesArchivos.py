@@ -36,10 +36,10 @@ def leerData(archivo, depruacion: bool = False):
     tipoArchivos = [".md", ".json"]
 
     if ".md" in archivo or ".json" in archivo:
-        return ObtenerArchivo(archivo)
+        return ObtenerArchivo(archivo, depuracion=depruacion)
 
     for tipo in tipoArchivos:
-        dataTmp = ObtenerArchivo(f"{archivo}{tipo}")
+        dataTmp = ObtenerArchivo(f"{archivo}{tipo}", depuracion=depruacion)
         if dataTmp is not None:
             if depruacion:
                 logger.info(f"Abriendo {archivo}{tipo}")
