@@ -124,8 +124,7 @@ def EscribirArchivo(Archivo: str, Data) -> None:
         elif SufijoArchivo == ".txt":
             f.write(Data)
         elif SufijoArchivo == ".md":
-            yaml.dump(Data, f, explicit_start=True, explicit_end=True,
-                      allow_unicode=True, sort_keys=False)
+            yaml.dump(Data, f, explicit_start=True, explicit_end=True, allow_unicode=True, sort_keys=False)
         else:
             print(f"Error: {Archivo} Atributo {SufijoArchivo}")
 
