@@ -56,7 +56,9 @@ def BorrarFolderConfig() -> None:
         print("Error: %s - %s." % (e.filename, e.strerror))
 
 
-def ObtenerArchivo(Archivo: str | PosixPath, EnConfig: bool = True, depuracion: bool = False):
+def ObtenerArchivo(
+    Archivo: str | PosixPath, EnConfig: bool = True, depuracion: bool = False
+):
     """Leer y devuelta la información de un archivo dentro del folded de configuraciones."""
     if EnConfig:
         ArchivoConfig = ObtenerFolderConfig()
@@ -84,7 +86,9 @@ def ObtenerArchivo(Archivo: str | PosixPath, EnConfig: bool = True, depuracion: 
     return None
 
 
-def ObtenerValor(Archivo: str | PosixPath, Atributo: list | str, depuracion: bool = False):
+def ObtenerValor(
+    Archivo: str | PosixPath, Atributo: list | str, depuracion: bool = False
+):
     """Obtiene un Atributo de un Archivo."""
 
     if Path(Archivo).suffix == "":
@@ -124,7 +128,14 @@ def EscribirArchivo(Archivo: str, Data) -> None:
         elif SufijoArchivo == ".txt":
             f.write(Data)
         elif SufijoArchivo == ".md":
-            yaml.dump(Data, f, explicit_start=True, explicit_end=True, allow_unicode=True, sort_keys=False)
+            yaml.dump(
+                Data,
+                f,
+                explicit_start=True,
+                explicit_end=True,
+                allow_unicode=True,
+                sort_keys=False,
+            )
         else:
             print(f"Error: {Archivo} Atributo {SufijoArchivo}")
 
@@ -137,7 +148,13 @@ def SalvarArchivo(Archivo: str | PosixPath, Data) -> None:
     EscribirArchivo(Archivo, Data)
 
 
-def SalvarValor(Archivo: str | PosixPath, Atributo: str | list, Valor, local: bool = True, depuracion: bool = False) -> None:
+def SalvarValor(
+    Archivo: str | PosixPath,
+    Atributo: str | list,
+    Valor,
+    local: bool = True,
+    depuracion: bool = False,
+) -> None:
     """Salvar un Valor en Archivo."""
     ArchivoConfig = ObtenerFolderConfig()
     if local:
@@ -169,7 +186,9 @@ def UnirPath(Path1: str | PosixPath, Path2: str | PosixPath) -> str | PosixPath:
     return os.path.join(Path1, Path2)
 
 
-def RelativoAbsoluto(Path: str | PosixPath, FolderActual: str | PosixPath) -> str | PosixPath:
+def RelativoAbsoluto(
+    Path: str | PosixPath, FolderActual: str | PosixPath
+) -> str | PosixPath:
     """Convierte dirección relativas en absolutas."""
     if Path.startswith("./"):
         return UnirPath(FolderActual, QuitarPrefixInicio(Path, "./"))
@@ -178,7 +197,7 @@ def RelativoAbsoluto(Path: str | PosixPath, FolderActual: str | PosixPath) -> st
 
 def QuitarPrefixInicio(text: str, prefix: str) -> str:
     """Quita un Prefijo o patron del inicio de una cadena."""
-    return text[text.startswith(prefix) and len(prefix):]
+    return text[text.startswith(prefix) and len(prefix) :]
 
 
 def ObtenerListaFolder(Directorio: str) -> list:
@@ -238,3 +257,21 @@ def rutaAbsoluta(ruta: str):
     """Obtiene ruta absoluta si es relataba"""
 
     return os.path.abspath(ruta)
+
+
+def configurarArchivo(archivo: str, data: dict) -> None:
+    """Configura un archivo de configuración. lo crea si no existe o agrega la información que no existe
+
+    Args:
+        archivo (str): Nombre del archivo de configuración.
+        data (dict): Datos a guardar en el archivo.
+    """
+    if not os.path.exists(archivo):
+        with open(archivo, "w") as f:
+            SalvarArchivo(archivo, data)
+    else:
+        dataAnterior = ObtenerArchivo(archivo)
+        for clave, valor in data.items():
+            if clave not in dataAnterior:
+                dataAnterior[clave] = valor
+        SalvarArchivo(archivo, dataAnterior)
