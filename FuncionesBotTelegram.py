@@ -26,4 +26,4 @@ def EnviarMensajeTelegram(mensaje, tokenBot=None, idChat=None):
         mensaje = mensaje.replace("_", "\\_")
         asyncio.run(bot.send_message(chat_id=idChat, text=mensaje, parse_mode="Markdown"))
     except Exception as err:
-        print(f"TelegramBot[Error] {err}")
+        logger.error(f"TelegramBot[Error] {err}")
