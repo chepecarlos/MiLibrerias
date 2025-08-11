@@ -1,4 +1,4 @@
-"""Libreria de Funciones para Lectura y escritura de archivos."""
+"""Librería de Funciones para Lectura y escritura de archivos."""
 
 import json
 import os
@@ -179,6 +179,33 @@ def SalvarValor(
         data[Atributo] = Valor
 
     EscribirArchivo(Archivo, data)
+    
+def agregarValor(archivo: str | PosixPath, atributo: str | list, valor, local: bool = True, depuracion: bool = False) -> None:
+    """Agrega un valor a si existe el archivo.
+
+    Args:
+        archivo (str | PosixPath): _description_
+        atributo (str | list): _description_
+        valor (_type_): _description_
+        local (bool, optional): _description_. Defaults to True.
+        depuracion (bool, optional): _description_. Defaults to False.
+
+    Returns:
+        _type_: _description_
+    """
+    
+    ArchivoConfig = ObtenerFolderConfig()
+    if local:
+        archivo = UnirPath(ArchivoConfig, archivo)
+
+    if Path(archivo).suffix == "":
+        archivo = f"{archivo}.md"
+        
+    if not os.path.exists(archivo):
+        print(f"Error agregando Valor: No existe el archivo {archivo}")
+        return False
+    
+    SalvarValor(archivo, atributo, valor, local, depuracion)
 
 
 def UnirPath(Path1: str | PosixPath, Path2: str | PosixPath) -> str | PosixPath:
